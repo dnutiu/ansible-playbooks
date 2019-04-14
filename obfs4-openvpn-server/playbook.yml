@@ -2,13 +2,16 @@
   gather_facts: yes
   become_user: root
   tasks:
-  - name: Install python 2
-    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  - name: Check OpenVPN installation.
+    stat: 
+      path: /etc/openvpn/server.conf
+    register: openvpn_config_file
   - name: Download OpenVPN install script.
     get_url:
       url: https://raw.githubusercontent.com/angristan/openvpn-install/master/openvpn-install.sh
       dest: /etc/openvpn-install.sh
-  - name: Install OpenVPN
+    when: openvpn_config_file.stat.exists == false
+  - name: Install OpenVPN.
     command: bash /etc/openvpn-install.sh
     environment:
       APPROVE_INSTALL: y
@@ -21,33 +24,50 @@
       CUSTOMIZE_ENC: n
       CLIENT: client
       PASS: 1
-  - name: Retrieve the OpenVPN client file.
+    when: openvpn_config_file.stat.exists == false
+  - name: Fetch OpenVPN client file.
     fetch:
       src: /root/client.ovpn
       dest: .
       mode: 0774
-  - name: Install obfsproxy
+  - name: Install Obfs4.
     apt: pkg=obfs4proxy state=present
-  - name: Creates obfs4 directories
+  - name: Create Obfs4 config directories.
     file:
       path: /var/lib/tor/pt_state/obfs4
       state: directory
-  - name: Copy obfs4 config from host to remote
+  - name: Copy Obfs4 config.
     copy:
       src: obfs4.config
       dest: /var/lib/tor/pt_state/obfs4/obfs4.config
-  - name: Create systemd service for obfs4
+  - name: Create a systemd service for Obfs4.
     copy:
       src: obfs4proxy.service
       dest: /etc/systemd/system/obfs4proxy.service
-  - name: Enable the obfs4proxy systemd service
+  - name: Enable the systemd service for Obfs4.
     systemd:
       name: obfs4proxy
       state: started
       enabled: yes
-  - name: Retrieve the obs4 cert key file.
+  - name: Fetch the Obfs4 certificate.
     fetch:
       src: /var/lib/tor/pt_state/obfs4/obfs4_bridgeline.txt
       dest: .
       mode: 0774
+  - name: Install Firewall
+    apt: pkg=ufw state=present
+  - name: Firewall - Limit ssh/tcp
+    ufw:
+      rule: limit
+      port: ssh
+      proto: tcp
+  - name: Firewall - Limit 443/tcp
+    ufw:
+      rule: limit
+      port: 443
+      proto: tcp
+  - name: Firewall - Enable
+    ufw:
+      state: enabled
+      logging: on
   

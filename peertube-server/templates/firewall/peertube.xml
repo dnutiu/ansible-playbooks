@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>PeerTube Service</short>
+  <description>PeerTube is a federated video sharing platform.</description>
+  <port protocol="tcp" port="{{ 1935 }}" />
+  <port protocol="tcp" port="{{ 9000 }}" />
+  </service>

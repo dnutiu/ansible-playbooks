@@ -1,0 +1,7 @@
+[Unit]
+Description=Peertube Network
+
+[Network]
+Subnet=173.18.0.42/16
+Gateway=173.18.0.1
+Label=app=peertube

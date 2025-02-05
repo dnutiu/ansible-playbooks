@@ -1,0 +1,11 @@
+name=$(date '+%Y-%m-%d')
+cd {{ peertube.base_directory }}
+tar -zcvf "$name.config.tar.gz" config
+tar -zcvf "$name.data.tar.gz" data
+mkdir -p {{ peertube.backups_directory }}
+mv *.tar.gz {{ peertube.backups_directory }}
+cd {{ postgres.postgres_directory }}/..
+systemctl stop postgres.service
+tar -zcvf "$name.postgres.tar.gz" postgres
+systemctl start postgres.service
+mv *.tar.gz {{ peertube.backups_directory }}

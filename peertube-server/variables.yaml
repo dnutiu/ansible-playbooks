@@ -1,6 +1,7 @@
 peertube:
-  data_directory: "/peertube/data"
-  config_directory: "/peertube/config"
+  base_directory: "/peertube"
+  env_file: "environment_file"
+  backups_directory: "/peertube/backups"
   image_name: "docker.io/chocobozzz/peertube:v7.0.1-bookworm"
 postgres:
   postgres_directory: "/peertube/postgres"

@@ -1,0 +1,8 @@
+# TODO
+[Unit]
+Description=peertube-backup
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/bin/bash TODO/backup.sh

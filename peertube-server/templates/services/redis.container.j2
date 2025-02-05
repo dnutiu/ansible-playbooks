@@ -1,0 +1,11 @@
+[Container]
+ContainerName=redis
+ServiceName=redis
+Image={{ redis.image_name }}
+Network=peertube.network
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

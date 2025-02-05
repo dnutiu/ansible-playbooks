@@ -11,19 +11,25 @@
       block:
         - name: Create PeerTube data directory
           ansible.builtin.file:
-            path: "/{{ peertube.data_directory }}"
+            path: "{{ peertube.base_directory }}/data"
             state: directory
             mode: "0755"
           ignore_errors: true
         - name: Create PeerTube config directory
           ansible.builtin.file:
-            path: "/{{ peertube.config_directory }}"
+            path: "{{ peertube.base_directory }}/config"
             state: directory
             mode: "0754"
           ignore_errors: true
         - name: Create PostgresSQL directory
           ansible.builtin.file:
-            path: "/{{ postgres.postgres_directory }}"
+            path: "{{ postgres.postgres_directory }}"
+            state: directory
+            mode: "0754"
+          ignore_errors: true
+        - name: Create Backups directory
+          ansible.builtin.file:
+            path: "{{ peertube.backups_directory }}"
             state: directory
             mode: "0754"
           ignore_errors: true

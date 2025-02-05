@@ -7,60 +7,79 @@
 
   tasks:
     # Create necessary directories.
-    - name: Create PeerTube data directory
-      ansible.builtin.file:
-        path: "/{{ peertube.data_directory }}"
-        state: directory
-        mode: '0755'
-      ignore_errors: true
-    - name: Create PeerTube config directory
-      ansible.builtin.file:
-        path: "/{{ peertube.config_directory }}"
-        state: directory
-        mode: '0754'
-      ignore_errors: true
-    - name: Create PostgresSQL directory
-      ansible.builtin.file:
-        path: "/{{ postgres.postgres_directory }}"
-        state: directory
-        mode: '0754'
-      ignore_errors: true
+    #
+    - name: "Create directories"
+      block:
+        - name: Create PeerTube data directory
+          ansible.builtin.file:
+            path: "/{{ peertube.data_directory }}"
+            state: directory
+            mode: "0755"
+          ignore_errors: true
+        - name: Create PeerTube config directory
+          ansible.builtin.file:
+            path: "/{{ peertube.config_directory }}"
+            state: directory
+            mode: "0754"
+          ignore_errors: true
+        - name: Create PostgresSQL directory
+          ansible.builtin.file:
+            path: "/{{ postgres.postgres_directory }}"
+            state: directory
+            mode: "0754"
+          ignore_errors: true
     # Ensure dependencies are installed
-    - name: Ensure Podman is installed
-      ansible.builtin.package:
-        name: podman
-        state: present
-    - name: Ensure Udica is installed
-      ansible.builtin.package:
-        name: udica
-        state: present
-    - name: Ensure container-selinux is installed
-      ansible.builtin.package:
-        name: container-selinux
-        state: present
+    #
+    - name: "Install dependencies"
+      block:
+        - name: Ensure Podman is installed
+          ansible.builtin.package:
+            name: podman
+            state: present
+        - name: Ensure Udica is installed
+          ansible.builtin.package:
+            name: udica
+            state: present
+        - name: Ensure container-selinux is installed
+          ansible.builtin.package:
+            name: container-selinux
+            state: present
     # Pull docker images
-    - name: Pull PeerTube image
-      containers.podman.podman_image:
-        name: "{{ peertube.image_name }}"
-        state: present
-    - name: Pull Postgres image
-      containers.podman.podman_image:
-        name: "{{ postgres.image_name }}"
-        state: present
-    - name: Pull Redis image
-      containers.podman.podman_image:
-        name: "{{ redis.image_name }}"
-        state: present
-    # Load SELinux policies
+    #
+    - name: "Pull container images"
+      block:
+        - name: Pull PeerTube image
+          containers.podman.podman_image:
+            name: "{{ peertube.image_name }}"
+            state: present
+        - name: Pull Postgres image
+          containers.podman.podman_image:
+            name: "{{ postgres.image_name }}"
+            state: present
+        - name: Pull Redis image
+          containers.podman.podman_image:
+            name: "{{ redis.image_name }}"
+            state: present
     - name: Add firewall ports
       block:
-        - name: Create a firewalld service file (if it doesn't exist)
-          ansible.posix.firewalld:
+        - name: Create firewalld service
+          ansible.builtin.copy:
             src: ./templates/firewall/peertube.xml
             dest: /etc/firewalld/services/peertube.xml
+            mode: "0644"
+          notify:
+            - reload firewalld
+        - name: Enable firewalld service
+          ansible.posix.firewalld:
+            service: peertube
             state: enabled
-            notify: reload firewalld
+            permanent: true
+            immediate: true
+            offline: true
+          notify:
+            - reload firewalld
   handlers:
     - name: reload firewalld
-      ansible.posix.firewalld:
+      ansible.builtin.service:
+        name: firewalld
         state: reloaded

@@ -1,1 +1,48 @@
-# TODO
+# Database / Postgres service configuration
+POSTGRES_USER={{peertube.environment.db_user}}
+POSTGRES_PASSWORD={{peertube.environment.db_pass}}
+POSTGRES_DB=peertube
+
+# Database username and password used by PeerTube must match Postgres', so they are copied:
+PEERTUBE_DB_USERNAME={{peertube.environment.db_user}}
+PEERTUBE_DB_PASSWORD={{peertube.environment.db_pass}}
+PEERTUBE_DB_SSL=false
+
+# Default to Postgres service name "postgres" in docker-compose.yml
+PEERTUBE_DB_HOSTNAME=postgres
+
+# PeerTube server configuration
+PEERTUBE_WEBSERVER_HOSTNAME={{peertube.environment.webserver.hostname}}
+PEERTUBE_WEBSERVER_PORT={{peertube.environment.webserver.port}}
+PEERTUBE_WEBSERVER_HTTPS={{peertube.environment.webserver.tls}}
+PEERTUBE_TRUST_PROXY={{peertube.environment.webserver.trust_proxy}}
+
+# Generate one using `openssl rand -hex 32`
+PEERTUBE_SECRET={{peertube.environment.secret}}
+
+# E-mail configuration
+PEERTUBE_SMTP_USERNAME={{peertube.environment.smtp.user}}
+PEERTUBE_SMTP_PASSWORD={{peertube.environment.smtp.pass}}
+PEERTUBE_SMTP_HOSTNAME=smtp.gmail.com
+PEERTUBE_SMTP_PORT=465
+PEERTUBE_SMTP_FROM={{peertube.environment.smtp.email}}
+PEERTUBE_SMTP_TLS=true
+PEERTUBE_SMTP_DISABLE_STARTTLS=true
+PEERTUBE_ADMIN_EMAIL={{peertube.environment.smtp.email}}
+
+PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PUBLIC="public-read"
+PEERTUBE_OBJECT_STORAGE_UPLOAD_ACL_PRIVATE="private"
+PEERTUBE_LOG_LEVEL=info
+
+# /!\ Prefer to use the PeerTube admin interface to set the following configurations /!\
+#PEERTUBE_SIGNUP_ENABLED=true
+#PEERTUBE_TRANSCODING_ENABLED=true
+#PEERTUBE_CONTACT_FORM_ENABLED=true
+
+# Additional
+# The database name used by PeerTube will be PEERTUBE_DB_NAME (only if set) *OR* 'peertube'+PEERTUBE_DB_SUFFIX
+#PEERTUBE_DB_NAME=<MY POSTGRES DB NAME>
+#PEERTUBE_DB_SUFFIX=_prod
+
+# PEERTUBE_DB_PORT=5444
+# PEERTUBE_REDIS_HOSTNAME=localhost

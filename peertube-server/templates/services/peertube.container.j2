@@ -4,12 +4,12 @@ After=redis.service
 
 [Container]
 ContainerName=peertube
-EnvironmentFile={{ peertube.base_directory }}/{{ peertube.env_file }}
+EnvironmentFile={{ base_directory }}/{{ peertube.env_file }}
 Image={{ peertube.image_name}}
 PublishPort=1935:1935
 PublishPort=9000:9000
-Volume={{ peertube.base_directory }}/data:/data
-Volume={{ peertube.base_directory }}/config:/config
+Volume={{ peertube.data_directory }}/data:/data
+Volume={{ peertube.config_directory }}/config:/config
 SecurityLabelType=peertube.process
 Network=peertube.network
 

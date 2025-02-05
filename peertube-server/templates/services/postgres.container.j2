@@ -5,7 +5,7 @@ After=redis.service
 [Container]
 ServiceName=postgres
 ContainerName=postgres
-EnvironmentFile={{ peertube.base_directory }}/{{ peertube.env_file }}
+EnvironmentFile={{ base_directory }}/{{ peertube.env_file }}
 Image={{ postgres.image_name }}
 Volume={{ postgres.postgres_directory }}:/var/lib/postgresql/data
 Network=peertube.network

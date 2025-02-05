@@ -1,13 +1,12 @@
 - name: Create directory and templated file
   hosts: nuculabs
-  become: yes
+  become: true
   become_method: sudo
   vars_files:
     - variables.yaml
 
   tasks:
     # Create necessary directories.
-    #
     - name: "Create directories"
       block:
         - name: Create PeerTube data directory
@@ -29,7 +28,6 @@
             mode: "0754"
           ignore_errors: true
     # Ensure dependencies are installed
-    #
     - name: "Install dependencies"
       block:
         - name: Ensure Podman is installed
@@ -45,7 +43,6 @@
             name: container-selinux
             state: present
     # Pull docker images
-    #
     - name: "Pull container images"
       block:
         - name: Pull PeerTube image
@@ -78,6 +75,42 @@
             offline: true
           notify:
             - reload firewalld
+    - name: "Load CIL policies"
+      block:
+        - name: Copy peertube cil
+          ansible.builtin.copy:
+            src: ./templates/cil/peertube.cil
+            dest: /tmp/peertube.cil
+            mode: "0644"
+        - name: Copy postgres cil
+          ansible.builtin.copy:
+            src: ./templates/cil/postgres.cil
+            dest: /tmp/postgres.cil
+            mode: "0644"
+        - name: Load PeertTube CIL policy
+          ansible.builtin.command:
+            argv:
+              - semodule
+              - -i
+              - /tmp/peertube.cil
+              - /usr/share/udica/templates/base_container.cil
+              - /usr/share/udica/templates/net_container.cil
+        - name: Load Postgres CIL policy
+          ansible.builtin.command:
+            argv:
+              - semodule
+              - -i
+              - /tmp/postgres.cil
+              - /usr/share/udica/templates/base_container.cil
+              - /usr/share/udica/templates/net_container.cil
+        - name: "Allow samba access from container"
+          ansible.builtin.command:
+            argv:
+              - semanage
+              - boolean
+              - -m
+              - virt_use_samba
+              - --on
   handlers:
     - name: reload firewalld
       ansible.builtin.service:

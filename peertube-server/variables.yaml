@@ -18,7 +18,7 @@ peertube:
     smtp:
       user: ""
       pass: ""
-      email: ""
+      email: "no-reply@peertube.local"
       hostname: "smtp.gmail.com"
 postgres:
   postgres_directory: "/peertube/postgres"

@@ -1,5 +1,5 @@
-- name: Create directory and templated file
-  hosts: nuculabs
+- name: Install PeerTube
+  hosts: local
   become: true
   become_method: sudo
   vars_files:
@@ -76,8 +76,11 @@
             src: ./templates/firewall/peertube.xml
             dest: /etc/firewalld/services/peertube.xml
             mode: "0644"
-          notify:
-            - reload firewalld
+        - name: Reload firewalld
+          ansible.builtin.command:
+            argv:
+              - firewall-cmd
+              - --reload
         - name: Enable firewalld service
           ansible.posix.firewalld:
             service: peertube
@@ -85,8 +88,6 @@
             permanent: true
             immediate: true
             offline: true
-          notify:
-            - reload firewalld
     - name: "Load CIL policies"
       block:
         - name: Copy peertube cil
@@ -126,30 +127,35 @@
     - name: "Setup Containers"
       block:
         - name: "Copy environment file"
-          ansible.builtin.copy:
+          ansible.builtin.template:
             src: ./templates/services/environment_file
             dest: "{{ base_directory }}/{{ peertube.env_file }}"
             mode: "0644"
         - name: "Copy peertube.network"
-          ansible.builtin.copy:
+          ansible.builtin.template:
             src: ./templates/services/peertube.network
             dest: /etc/containers/systemd/peertube.network
             mode: "0644"
         - name: "Copy redis container"
-          ansible.builtin.copy:
+          ansible.builtin.template:
             src: ./templates/services/redis.container.j2
             dest: /etc/containers/systemd/redis.container
             mode: "0644"
         - name: "Copy postgres container"
-          ansible.builtin.copy:
+          ansible.builtin.template:
             src: ./templates/services/postgres.container.j2
             dest: /etc/containers/systemd/postgres.container
             mode: "0644"
         - name: "Copy peertube container"
-          ansible.builtin.copy:
+          ansible.builtin.template:
             src: ./templates/services/peertube.container.j2
             dest: /etc/containers/systemd/peertube.container
             mode: "0644"
+        - name: Reload systemd
+          ansible.builtin.command:
+            argv:
+              - systemctl
+              - daemon-reload
         - name: "Start redis.container"
           ansible.builtin.systemd_service:
             name: redis.service
@@ -165,20 +171,25 @@
     - name: "Setup Backup"
       block:
         - name: "Copy backup script"
-          ansible.builtin.copy:
+          ansible.builtin.template:
             src: ./templates/backup/backup.sh.j2
             dest: "{{peertube.backups_directory}}/backup.sh"
             mode: "0644"
         - name: "Copy backup service"
-          ansible.builtin.copy:
+          ansible.builtin.template:
             src: ./templates/backup/peertube-backup.service.j2
             dest: /etc/systemd/system/peertube-backup.service
             mode: "0644"
         - name: "Copy backup timer"
-          ansible.builtin.copy:
+          ansible.builtin.template:
             src: ./templates/backup/peertube-backup.timer
             dest: /etc/systemd/system/peertube-backup.timer
             mode: "0644"
+        - name: Reload systemd
+          ansible.builtin.command:
+            argv:
+              - systemctl
+              - daemon-reload
         - name: Enable back-up service
           ansible.builtin.systemd_service:
             name: peertube-backup.service
@@ -189,8 +200,3 @@
             name: peertube-backup.timer
             state: started
             enabled: true
-  handlers:
-    - name: reload firewalld
-      ansible.builtin.service:
-        name: firewalld
-        state: reloaded

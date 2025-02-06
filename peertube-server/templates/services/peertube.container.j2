@@ -8,8 +8,8 @@ EnvironmentFile={{ base_directory }}/{{ peertube.env_file }}
 Image={{ peertube.image_name}}
 PublishPort=1935:1935
 PublishPort=9000:9000
-Volume={{ peertube.data_directory }}/data:/data
-Volume={{ peertube.config_directory }}/config:/config
+Volume={{ peertube.data_directory }}:/data
+Volume={{ peertube.config_directory }}:/config
 SecurityLabelType=peertube.process
 Network=peertube.network
 

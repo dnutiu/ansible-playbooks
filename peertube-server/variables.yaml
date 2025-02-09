@@ -2,6 +2,8 @@
 selinux_virt_use_samba: true
 base_directory: "/peertube"
 peertube:
+  # It will open ports 9000 and 1935. If you have the webserver on the same machine you should disable this.
+  open_firewall_ports: true
   env_file: "environment_file"
   backups_directory: "/peertube/backups"
   image_name: "docker.io/chocobozzz/peertube:v7.0.1-bookworm"

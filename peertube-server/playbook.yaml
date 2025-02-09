@@ -88,6 +88,7 @@
             permanent: true
             immediate: true
             offline: true
+      when: peertube.open_firewall_ports
     - name: "Load CIL policies"
       block:
         - name: Copy peertube cil

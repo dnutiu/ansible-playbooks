@@ -1,3 +1,5 @@
+# Set this to true if you want to mount SAMBA volumes inside containers.
+selinux_virt_use_samba: true
 base_directory: "/peertube"
 peertube:
   env_file: "environment_file"

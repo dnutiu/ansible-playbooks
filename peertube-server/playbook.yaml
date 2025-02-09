@@ -124,6 +124,7 @@
               - -m
               - virt_use_samba
               - --on
+          when: selinux_virt_use_samba
     - name: "Setup Containers"
       block:
         - name: "Copy environment file"

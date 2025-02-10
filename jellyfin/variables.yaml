@@ -1,0 +1,7 @@
+enable_hardware_acceleration: true
+setup_firewall: true # exposes the firewall ports
+jellyfin:
+  container_image: "docker.io/jellyfin/jellyfin:latest"
+  media_directory: "/jellyfin/media"
+  cache_directory: "/jellyfin/cache"
+  config_directory: "/jellyfin/config"

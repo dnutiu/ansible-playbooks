@@ -18,3 +18,13 @@ flowchart TD
 Blogs:
 - https://blog.nuculabs.dev/posts/2025/2025-01-25-self-hosting-peertube/
 - https://docs.joinpeertube.org/install/docker
+
+### Email
+
+For e-mail, I use services from [Fastmail.com](https://join.fastmail.com/976cc1b5) on my custom domain.
+
+I like it since it's budget friendly and
+allows me to set up app passwords with SMTP access only (sending e-emails only as I share my Fastmail user with my
+PeerTub server since it only needs to send emails not receive them).
+
+You can get 10% off the first year if you use my referral link.

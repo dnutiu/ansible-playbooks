@@ -21,10 +21,6 @@ Blogs:
 
 ### Email
 
-For e-mail, I use services from [Fastmail.com](https://join.fastmail.com/976cc1b5) on my custom domain.
+For e-mail, I use services from a mail provider on my custom domain.
 
-I like it since it's budget friendly and
-allows me to set up app passwords with SMTP access only (sending e-emails only as I share my Fastmail user with my
-PeerTub server since it only needs to send emails not receive them).
-
-You can get 10% off the first year if you use my referral link.
+You can use any service that allows you SMTP access such as Gmail (with app passwords), Fastmail (paid), ProtonMail (paid).

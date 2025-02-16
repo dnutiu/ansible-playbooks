@@ -12,7 +12,7 @@
     # Create necessary directories.
     - name: "Create directories"
       block:
-        - name: Create data directory
+        - name: Create cache directory
           ansible.builtin.file:
             path: "{{ jellyfin.cache_directory }}"
             state: directory

@@ -1,6 +1,7 @@
 setup_selinux: true
 setup_firewall: true # exposes the firewall ports
 fresh_rss:
+  base_url: freshrss.example.com
   port: 8080
   cron_min: "*,45"
   container_image: "docker.io/freshrss/freshrss:1.25.0"

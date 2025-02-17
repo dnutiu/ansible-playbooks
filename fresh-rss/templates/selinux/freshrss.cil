@@ -1,0 +1,8 @@
+(block freshrss
+    (blockinherit container)
+    (blockinherit restricted_net_container)
+
+    (allow process default_t (dir (setattr add_name write create)))
+    (allow process default_t (file (create)))
+    (allow process http_port_t (tcp_socket (name_bind)))
+)

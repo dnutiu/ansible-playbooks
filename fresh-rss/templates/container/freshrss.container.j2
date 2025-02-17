@@ -1,0 +1,20 @@
+[Unit]
+Description=freshrss
+
+[Container]
+Image={{ fresh_rss.container_image }}
+AutoUpdate=registry
+PublishPort={{ fresh_rss.port }}:80/tcp
+Volume={{ fresh_rss.base_directory }}/{{ fresh_rss.data_directory }}:/var/www/FreshRSS/data:Z
+Volume={{ fresh_rss.base_directory }}/{{ fresh_rss.extensions_directory }}:/var/www/FreshRSS/extensions:Z
+Environment=CRON_MIN={{ fresh_rss.cron_min }}
+SecurityLabelType=freshrss.process
+
+
+[Service]
+# Inform systemd of additional exit status
+SuccessExitStatus=0 143
+
+[Install]
+# Start by default on boot
+WantedBy=default.target

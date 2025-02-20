@@ -1,0 +1,20 @@
+[Unit]
+Description=node_exporter
+
+[Container]
+Image={{ node_exporter.container_image }}
+AutoUpdate=registry
+Network=host
+AddCapability=SYS_TIME
+Volume=/proc:/host/proc:ro
+Volume=/sys:/host/sys:ro
+Volume=/:/rootfs:ro,rslave
+Exec=--path.procfs="/host/proc" --path.sysfs="/host/sys" --collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($|/)" --web.listen-address="0.0.0.0:{{ node_exporter.port }}"
+
+[Service]
+# Inform systemd of additional exit status
+SuccessExitStatus=0 143
+
+[Install]
+# Start by default on boot
+WantedBy=default.target

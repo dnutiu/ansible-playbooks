@@ -1,0 +1,4 @@
+setup_firewall: true
+node_exporter:
+  container_image: "docker.io/bitnami/node-exporter:latest"
+  port: 9100

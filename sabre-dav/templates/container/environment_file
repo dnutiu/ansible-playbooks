@@ -1,0 +1,13 @@
+MSMTPRC="
+defaults
+auth           on
+tls            on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+account        default
+host           <smtp host>
+port           587
+from           baikal@example.com
+user           <user>
+password       <password>
+"
+

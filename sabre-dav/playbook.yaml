@@ -41,6 +41,11 @@
             src: ./templates/container/baikal.container.j2
             dest: /etc/containers/systemd/baikal.container
             mode: "0644"
+        - name: "Copy environment file"
+          ansible.builtin.template:
+            src: ./templates/container/environment_file
+            dest: "{{ baikal.base_directory }}/environment_file"
+            mode: "0644"
         - name: Reload systemd
           ansible.builtin.command:
             cmd: systemctl daemon-reload

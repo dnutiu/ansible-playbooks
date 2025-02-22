@@ -1,4 +1,3 @@
-setup_selinux: true
 setup_firewall: true # exposes the firewall ports
 baikal:
   container_image: "docker.io/ckulka/baikal:nginx"

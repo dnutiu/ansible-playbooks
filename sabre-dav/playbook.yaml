@@ -26,30 +26,6 @@
             state: directory
             mode: "0755"
           ignore_errors: true
-#    - name: Setup SELinux
-#      block:
-#        - name: Ensure Udica is installed
-#          ansible.builtin.package:
-#            name: udica
-#            state: present
-#        - name: Ensure container-selinux is installed
-#          ansible.builtin.package:
-#            name: container-selinux
-#            state: present
-#        - name: Copy baikal cil
-#          ansible.builtin.copy:
-#            src: ./templates/selinux/baikal.cil
-#            dest: /tmp/baikal.cil
-#            mode: "0644"
-#        - name: Load baikal CIL policy
-#          ansible.builtin.command:
-#            argv:
-#              - semodule
-#              - -i
-#              - /tmp/baikal.cil
-#              - /usr/share/udica/templates/base_container.cil
-#              - /usr/share/udica/templates/net_container.cil
-#      when: setup_selinux
     - name: Setup Container
       block:
         - name: Ensure Podman is installed

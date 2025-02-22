@@ -1,0 +1,100 @@
+- name: Install Baïkal server
+  hosts: nuculabs
+  become: true
+  become_method: sudo
+  vars_files:
+    - variables.yaml
+  tasks:
+    # Create necessary directories.
+    - name: "Create directories"
+      block:
+        - name: Create base directory
+          ansible.builtin.file:
+            path: "{{ baikal.base_directory }}"
+            state: directory
+            mode: "0755"
+          ignore_errors: true
+        - name: Create data directory
+          ansible.builtin.file:
+            path: "{{ baikal.base_directory }}/{{ baikal.data_directory }}"
+            state: directory
+            mode: "0755"
+          ignore_errors: true
+        - name: Create extensions directory
+          ansible.builtin.file:
+            path: "{{ baikal.base_directory }}/{{ baikal.config_directory }}"
+            state: directory
+            mode: "0755"
+          ignore_errors: true
+#    - name: Setup SELinux
+#      block:
+#        - name: Ensure Udica is installed
+#          ansible.builtin.package:
+#            name: udica
+#            state: present
+#        - name: Ensure container-selinux is installed
+#          ansible.builtin.package:
+#            name: container-selinux
+#            state: present
+#        - name: Copy baikal cil
+#          ansible.builtin.copy:
+#            src: ./templates/selinux/baikal.cil
+#            dest: /tmp/baikal.cil
+#            mode: "0644"
+#        - name: Load baikal CIL policy
+#          ansible.builtin.command:
+#            argv:
+#              - semodule
+#              - -i
+#              - /tmp/baikal.cil
+#              - /usr/share/udica/templates/base_container.cil
+#              - /usr/share/udica/templates/net_container.cil
+#      when: setup_selinux
+    - name: Setup Container
+      block:
+        - name: Ensure Podman is installed
+          ansible.builtin.package:
+            name: podman
+            state: present
+        - name: Pull image
+          containers.podman.podman_image:
+            name: "{{ baikal.container_image }}"
+            state: present
+        - name: "Copy container"
+          ansible.builtin.template:
+            src: ./templates/container/baikal.container.j2
+            dest: /etc/containers/systemd/baikal.container
+            mode: "0644"
+        - name: Reload systemd
+          ansible.builtin.command:
+            cmd: systemctl daemon-reload
+        - name: Stop service
+          ansible.builtin.systemd_service:
+            name: baikal.service
+            state: stopped
+            enabled: true
+        - name: Enable service
+          ansible.builtin.systemd_service:
+            name: baikal.service
+            state: started
+            enabled: true
+    - name: Setup firewall
+      block:
+        - name: Create firewalld service
+          ansible.builtin.template:
+            src: ./templates/firewall/baikal.xml.j2
+            dest: /etc/firewalld/services/baikal.xml
+            mode: "0644"
+        - name: Reload firewalld
+          ansible.builtin.command:
+            argv:
+              - firewall-cmd
+              - --reload
+        - name: Enable firewalld service
+          ansible.posix.firewalld:
+            service: baikal
+            state: enabled
+            permanent: true
+            immediate: true
+            offline: true
+      when: setup_firewall

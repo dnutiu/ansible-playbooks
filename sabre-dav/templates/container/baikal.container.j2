@@ -1,0 +1,18 @@
+[Unit]
+Description=baikal
+
+[Container]
+Image={{ baikal.container_image }}
+AutoUpdate=registry
+PublishPort={{ baikal.port }}:80/tcp
+Volume={{ baikal.base_directory }}/{{ baikal.data_directory }}:/var/www/baikal/Specific:Z
+Volume={{ baikal.base_directory }}/{{ baikal.config_directory }}:/var/www/baikal/config:Z
+Environment=MSMTPRC={{ baikal.mail }}
+
+[Service]
+# Inform systemd of additional exit status
+SuccessExitStatus=0 143
+
+[Install]
+# Start by default on boot
+WantedBy=default.target

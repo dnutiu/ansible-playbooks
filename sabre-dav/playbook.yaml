@@ -20,7 +20,7 @@
             state: directory
             mode: "0755"
           ignore_errors: true
-        - name: Create extensions directory
+        - name: Create config directory
           ansible.builtin.file:
             path: "{{ baikal.base_directory }}/{{ baikal.config_directory }}"
             state: directory

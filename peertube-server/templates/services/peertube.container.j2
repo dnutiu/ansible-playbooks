@@ -1,6 +1,10 @@
 [Unit]
 Requires=redis.service
 After=redis.service
+BindsTo=redis.service
+Requires=postgres.service
+After=postgres.service
+BindsTo=postgres.service
 
 [Container]
 ContainerName=peertube

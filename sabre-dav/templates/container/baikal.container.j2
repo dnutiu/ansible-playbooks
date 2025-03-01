@@ -7,16 +7,7 @@ AutoUpdate=registry
 PublishPort={{ baikal.port }}:80/tcp
 Volume={{ baikal.base_directory }}/{{ baikal.data_directory }}:/var/www/baikal/Specific:Z
 Volume={{ baikal.base_directory }}/{{ baikal.config_directory }}:/var/www/baikal/config:Z
-Environment="MSMTPRC=defaults\n\
-auth           on\n\
-tls            on\n\
-tls_trust_file /etc/ssl/certs/ca-certificates.crt\n\
-account        default\n\
-host           host\n\
-port           587\n\
-from           baikal@example.com\n\
-user           user\n\
-password       pass\n\
+Environment="MSMTPRC={{ baikal.mail }}
 "
 
 [Service]

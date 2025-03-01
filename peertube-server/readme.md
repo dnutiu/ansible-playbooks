@@ -16,7 +16,7 @@ flowchart TD
 ```
 
 Blogs:
-- https://blog.nuculabs.dev/posts/2025/2025-01-25-self-hosting-peertube/
+- https://blog.nuculabs.de/posts/2025/2025-01-25-self-hosting-peertube/
 - https://docs.joinpeertube.org/install/docker
 
 ### Email

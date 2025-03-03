@@ -1,0 +1,22 @@
+[Unit]
+Description=anubis for {{ anubis.instance_name }}
+
+[Container]
+ContainerName=anubis_{{ anubis.instance_name }}
+Image={{ anubis.container_image }}
+AutoUpdate=registry
+PublishPort={{ anubis.http_port }}:8080/tcp
+PublishPort={{ anubis.metrics_port }}:9090/tcp
+Environment="BIND=:8080"
+Environment="METRICS_BIND=:9090"
+Environment="DIFFICULTY={{ anubis.difficulty }}"
+Environment="SERVE_ROBOTS_TXT={{ anubis.serve_robots_txt }}"
+Environment="TARGET={{ anubis.target }}"
+
+[Service]
+# Inform systemd of additional exit status
+SuccessExitStatus=0 143
+
+[Install]
+# Start by default on boot
+WantedBy=default.target

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Forgejo Service</short>
+  <description> Beyond coding. We forge.</description>
+  <port protocol="tcp" port="{{ forgejo.http_port }}" />
+  <port protocol="tcp" port="{{ forgejo.ssh_port }}" />
+</service>

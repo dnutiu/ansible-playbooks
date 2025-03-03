@@ -1,0 +1,18 @@
+[Unit]
+Description=forgejo
+
+[Container]
+ContainerName=forgejo
+Image={{ forgejo.container_image }}
+AutoUpdate=registry
+PublishPort={{ forgejo.http_port }}:3000/tcp
+PublishPort={{ forgejo.ssh_port }}:22/tcp
+Volume={{ forgejo.base_directory }}:/data:Z
+
+[Service]
+# Inform systemd of additional exit status
+SuccessExitStatus=0 143
+
+[Install]
+# Start by default on boot
+WantedBy=default.target

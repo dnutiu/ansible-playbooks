@@ -1,0 +1,29 @@
+- name: Backup forgejo
+  hosts: nuculabs
+  become: true
+  become_method: sudo
+  vars:
+    service_name: forgejo
+    service_directory: /forgejo
+    backup_destination: /mnt/data/forgejo-backup
+  tasks:
+    - name: Backup Service by file system directory
+      block:
+        - name: Stop service
+          ansible.builtin.systemd_service:
+            name: "{{ service_name }}"
+            state: stopped
+            enabled: true
+        - name: Synchronize directory from remote to local
+          synchronize:
+            src: "{{ service_directory }}"
+            dest: "{{ backup_destination }}"
+            mode: pull  # Pull files from the remote machine to the local machine
+            rsync_opts:
+              - "--compress"  # Optional: Enable compression
+              - "--delete"    # Optional: Delete files in the destination that don't exist in the source
+        - name: Enable service
+          ansible.builtin.systemd_service:
+            name: "{{ service_name }}"
+            state: started
+            enabled: true

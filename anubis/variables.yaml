@@ -8,3 +8,8 @@ anubis:
   metrics_port: 4001
   serve_robots_txt: "true"
   target: "http://host.docker.internal:9000"
+  og_passthrough: "true"
+  og_expiry_time: "24h"
+  og_cache_consider_host: "false"
+  webmaster_email: ""
+  policy_file_name: ""

@@ -12,6 +12,11 @@ Environment="METRICS_BIND=:9090"
 Environment="DIFFICULTY={{ anubis.difficulty }}"
 Environment="SERVE_ROBOTS_TXT={{ anubis.serve_robots_txt }}"
 Environment="TARGET={{ anubis.target }}"
+Environment="OG_PASSTHROUGH={{ anubis.og_passthrough }}"
+Environment="OG_EXPIRY_TIME={{ anubis.og_expiry_time }}"
+Environment="OG_CACHE_CONSIDER_HOST={{ anubis.og_cache_consider_host }}"
+Environment="WEBMASTER_EMAIL={{ anubis.webmaster_email }}"
+Environment="POLICY_FNAME={{ anubis.policy_file_name }}"
 
 [Service]
 # Inform systemd of additional exit status

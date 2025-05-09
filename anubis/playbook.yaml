@@ -5,6 +5,19 @@
   vars_files:
     - variables.yaml
   tasks:
+    - name: "Create directories"
+      block:
+        - name: Create base directory
+          ansible.builtin.file:
+            path: "{{ anubis.base_directory }}"
+            state: directory
+            mode: "0755"
+          ignore_errors: true
+    - name: Copy policy files
+      ansible.builtin.copy:
+        src: ./templates/anubis
+        dest: "/{{ anubis.base_directory }}/{{ anubis.instance_name }}/"
+        mode: "0644"
     - name: Setup Container
       block:
         - name: Ensure Podman is installed

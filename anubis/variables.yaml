@@ -2,6 +2,7 @@ setup_firewall: true # exposes the anubis firewall port
 setup_firewall_for_metrics: false # exposes the firewall port for metrics
 anubis:
   instance_name: "guard"
+  base_directory: "anubis"
   container_image: "ghcr.io/techarohq/anubis:v1.16.0"
   difficulty: 5
   http_port: 4000

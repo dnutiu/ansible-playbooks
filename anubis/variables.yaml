@@ -1,14 +1,14 @@
-setup_firewall: true # exposes the anubis firewall port
+setup_firewall: false # exposes the anubis firewall port
 setup_firewall_for_metrics: false # exposes the firewall port for metrics
 anubis:
-  instance_name: "guard"
+  instance_name: "forgejo"
   base_directory: "anubis"
   container_image: "ghcr.io/techarohq/anubis:v1.16.0"
   difficulty: 5
   http_port: 4000
   metrics_port: 4001
   serve_robots_txt: "true"
-  target: "http://host.docker.internal:9000"
+  target: "http://host.docker.internal:3000"
   og_passthrough: "true"
   og_expiry_time: "24h"
   og_cache_consider_host: "false"

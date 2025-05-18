@@ -17,7 +17,7 @@ Environment="OG_EXPIRY_TIME={{ anubis.og_expiry_time }}"
 Environment="OG_CACHE_CONSIDER_HOST={{ anubis.og_cache_consider_host }}"
 Environment="WEBMASTER_EMAIL={{ anubis.webmaster_email }}"
 Environment="POLICY_FNAME={{ anubis.policy_file_name }}"
-Volume="{{ anubis.base_directory }}:data/cfg"
+Volume=/{{ anubis.base_directory }}/{{ anubis.instance_name }}/:/data/cfg/
 
 [Service]
 # Inform systemd of additional exit status

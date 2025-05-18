@@ -15,7 +15,7 @@
           ignore_errors: true
     - name: Copy policy files
       ansible.builtin.copy:
-        src: ./templates/anubis
+        src: ./templates/anubis/
         dest: "/{{ anubis.base_directory }}/{{ anubis.instance_name }}/"
         mode: "0644"
     - name: Setup Container

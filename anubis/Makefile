@@ -6,4 +6,4 @@ install:
 list-hosts:
 	ansible-inventory -i inventory.ini --list
 run:
-	ansible-playbook -i inventory.ini playbook.yaml --ask-become-pass
+	ansible-playbook -i inventory.ini playbook.yaml

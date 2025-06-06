@@ -1,0 +1,18 @@
+[Unit]
+Description=Nginx for {{ instance_name }}
+
+[Container]
+ContainerName=nginx_{{ instance_name }}
+Image={{ container_image }}
+AutoUpdate=registry
+PublishPort={{ port }}:8080/tcp
+Volume=/{{ base_directory }}/{{ instance_name }}/public/:/usr/share/nginx/html
+Volume=/{{ base_directory }}/{{ instance_name }}/nginx.conf:/etc/nginx/nginx.conf
+
+[Service]
+# Inform systemd of additional exit status
+SuccessExitStatus=0 143
+
+[Install]
+# Start by default on boot
+WantedBy=default.target

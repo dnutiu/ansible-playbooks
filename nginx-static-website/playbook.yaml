@@ -1,0 +1,84 @@
+- name: Install Anubis
+  hosts: nuculabs
+  become: true
+  become_method: sudo
+  vars_files:
+    - variables.yaml
+  tasks:
+    - name: "Create directories"
+      block:
+        - name: Create base directory
+          ansible.builtin.file:
+            path: "{{ base_directory }}"
+            state: directory
+            mode: "0755"
+          ignore_errors: true
+    - name: "Create instance directory"
+      block:
+        - name: Create base directory
+          ansible.builtin.file:
+            path: "{{ base_directory }}/{{instance_name}}"
+            state: directory
+            mode: "0755"
+          ignore_errors: true
+    - name: "Create instance data directory"
+      block:
+        - name: Create base directory
+          ansible.builtin.file:
+            path: "{{ base_directory }}/{{instance_name}}/public"
+            state: directory
+            mode: "0755"
+          ignore_errors: true
+    - name: Copy configuration file
+      ansible.builtin.copy:
+        src: ./templates/nginx.conf
+        dest: "/{{ base_directory }}/{{.instance_name }}/nginx.conf"
+        mode: "0644"
+    - name: Setup Container
+      block:
+        - name: Ensure Podman is installed
+          ansible.builtin.package:
+            name: podman
+            state: present
+        - name: Pull image
+          containers.podman.podman_image:
+            name: "{{ container_image }}"
+            state: present
+        - name: "Copy container"
+          ansible.builtin.template:
+            src: ./templates/nginx.container.j2
+            dest: "/etc/containers/systemd/nginx_{{ instance_name }}.container"
+            mode: "0644"
+        - name: Reload systemd
+          ansible.builtin.command:
+            cmd: systemctl daemon-reload
+        - name: Stop service
+          ansible.builtin.systemd_service:
+            name: "nginx_{{ instance_name }}.service"
+            state: stopped
+            enabled: true
+        - name: Enable service
+          ansible.builtin.systemd_service:
+            name: "nginx_{{ instance_name }}.service"
+            state: started
+            enabled: true
+    - name: Setup firewall
+      block:
+        - name: Create firewalld service
+          ansible.builtin.template:
+            src: ./templates/nginx.xml.j2
+            dest: "/etc/firewalld/services/nginx_{{ instance_name }}.xml"
+            mode: "0644"
+        - name: Reload firewalld
+          ansible.builtin.command:
+            argv:
+              - firewall-cmd
+              - --reload
+        - name: Enable firewalld service
+          ansible.posix.firewalld:
+            service: "nginx_{{ instance_name }}"
+            state: enabled
+            permanent: true
+            immediate: true
+            offline: true
+      when: setup_firewall

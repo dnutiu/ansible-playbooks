@@ -1,0 +1,8 @@
+setup_firewall: false # exposes the firewall port
+port: 8080
+container_image: "docker.io/nginx:1.28.0"
+base_directory: "nginx_podman_config"
+instance_name: mysite
+root_location: /home/username/mysite/public/
+index_html: index.html
+server_name: "mysite.com www.mysite.com"

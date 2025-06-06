@@ -2,5 +2,5 @@
 <service>
   <short>Nginx Proxy for {{ instance_name }}</short>
   <description>A reverse NGINX proxy</description>
-  <port protocol="tcp" port="{{ port }}" />
+  <port protocol="tcp" port="{{ publish_port }}" />
 </service>

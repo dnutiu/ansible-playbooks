@@ -5,7 +5,7 @@ Description=Nginx for {{ instance_name }}
 ContainerName=nginx_{{ instance_name }}
 Image={{ container_image }}
 AutoUpdate=registry
-PublishPort={{ port }}:8080/tcp
+PublishPort={{ publish_port }}:8080/tcp
 Volume=/{{ base_directory }}/{{ instance_name }}/public/:/usr/share/nginx/html
 Volume=/{{ base_directory }}/{{ instance_name }}/nginx.conf:/etc/nginx/nginx.conf
 

@@ -1,7 +1,7 @@
 setup_firewall: false # exposes the firewall port
-port: 8080
+publish_port: 8080
 container_image: "docker.io/nginx:1.28.0"
 base_directory: "nginx_podman_config"
-instance_name: mysite
+instance_name: blog
 index_html: index.html
-server_name: "mysite.com www.mysite.com"
+server_name: "nuculabs.de www.nuculabs.de blog.nuculabs.de"

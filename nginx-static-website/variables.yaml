@@ -4,4 +4,3 @@ container_image: "docker.io/nginx:1.28.0"
 base_directory: "nginx_podman_config"
 instance_name: blog
 index_html: index.html
-server_name: "nuculabs.de www.nuculabs.de blog.nuculabs.de"

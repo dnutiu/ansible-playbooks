@@ -9,30 +9,26 @@
       block:
         - name: Create base directory
           ansible.builtin.file:
-            path: "{{ base_directory }}"
+            path: "/{{ base_directory }}"
             state: directory
             mode: "0755"
           ignore_errors: true
-    - name: "Create instance directory"
-      block:
-        - name: Create base directory
+        - name: Create instance directory
           ansible.builtin.file:
-            path: "{{ base_directory }}/{{instance_name}}"
+            path: "/{{ base_directory }}/{{instance_name}}"
             state: directory
             mode: "0755"
           ignore_errors: true
-    - name: "Create instance data directory"
-      block:
-        - name: Create base directory
+        - name: Create instance data directory
           ansible.builtin.file:
-            path: "{{ base_directory }}/{{instance_name}}/public"
+            path: "/{{ base_directory }}/{{instance_name}}/public"
             state: directory
             mode: "0755"
           ignore_errors: true
     - name: Copy configuration file
-      ansible.builtin.copy:
-        src: ./templates/nginx.conf
-        dest: "/{{ base_directory }}/{{.instance_name }}/nginx.conf"
+      ansible.builtin.template:
+        src: ./templates/nginx.conf.j2
+        dest: "/{{ base_directory }}/{{instance_name }}/nginx.conf"
         mode: "0644"
     - name: Setup Container
       block:

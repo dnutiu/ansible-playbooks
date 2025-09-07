@@ -3,5 +3,5 @@ forgejo:
   base_url: forgejo.example.com
   http_port: 3000
   ssh_port: 3001
-  container_image: "codeberg.org/forgejo/forgejo:11"
+  container_image: "codeberg.org/forgejo/forgejo:12"
   base_directory: "/forgejo"
